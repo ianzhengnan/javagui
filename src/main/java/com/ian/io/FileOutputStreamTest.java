@@ -15,6 +15,7 @@ public class FileOutputStreamTest {
             byte[] bytes = new byte[20];
             int hasRead;
             while((hasRead = inputStream.read(bytes)) > 0){
+                // 每次写入bytes数组中的0~19 共20个字节
                 outputStream.write(bytes, 0, hasRead);
             }
         }catch (IOException ioe){
