@@ -3,11 +3,13 @@ package com.ian.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.PushbackInputStream;
 
 public class FileInputStreamTest {
 
     private static File file;
     private static FileInputStream inputStream;
+    private static PushbackInputStream pushbackInputStream;
 
     public static void main(String[] args) throws IOException{
         try{
@@ -30,8 +32,12 @@ public class FileInputStreamTest {
                 }
 
                 // 其他read方法, 从缓冲区中读取从len(10)个字节，放到bytes数组中，不过不是从头放，是从offset的位置开始,所以，读取的后三位没有打印出来
-                int tmp = inputStream.read(bytes, 3, 10);
-                System.out.println(new String(bytes, 0, tmp));
+//                int tmp = inputStream.read(bytes, 3, 10);
+//                System.out.println(new String(bytes, 0, tmp));
+
+                // 退回缓冲区
+//                pushbackInputStream = new PushbackInputStream(inputStream, 100);
+
 
 
                 // 返回-1代表到了文件的结尾
