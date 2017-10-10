@@ -38,7 +38,9 @@ public class FileTest {
 
         FileStore store = Files.getFileStore(Paths.get("c:"));
         // 判断C盘的总空间，可用空间
-        System.out.println("C:共有空间：" + store.getTotalSpace());
-        System.out.println("C:可用空间：" + store.getUsableSpace());
+        long floor = 1024 * 1024 * 1024;
+        // getTotalSpace()得到的是字节数
+        System.out.println("C:共有空间：" + store.getTotalSpace()/floor + "G");
+        System.out.println("C:可用空间：" + store.getUsableSpace()/floor + "G");
     }
 }
