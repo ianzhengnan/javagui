@@ -11,7 +11,7 @@ public class FileOutputStreamTest {
         try(
                 FileInputStream inputStream = new FileInputStream("src/main/java/com/ian/io/FileOutputStreamTest.java");
                 FileOutputStream outputStream = new FileOutputStream("src/main/java/com/ian/io/FileOutputStreamTest.tmp")
-                ){
+        ){
             byte[] bytes = new byte[20];
             int hasRead;
             while((hasRead = inputStream.read(bytes)) > 0){
