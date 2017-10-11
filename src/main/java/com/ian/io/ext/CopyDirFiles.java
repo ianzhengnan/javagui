@@ -5,26 +5,31 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class CopyDirFiles {
 
+    private static String source;
+    private static String target;
+    
     public static void main(String[] args) throws Throwable{
 
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         while(sc.hasNext()){
             String[] paths = sc.next().split(" ");
-            if(!checkFileDirExists(paths)){
+            source = paths[0];
+            target = paths[1];
+            if(!checkFileDirExists()){
                 continue;
             }
             // 如果源地址是文件
-            if(!Files.isDirectory(Paths.get(paths[0]))){
-                copy(paths[0], paths[1]);
+            if(!Files.isDirectory(Paths.get(source))){
+                copy(source, target);
             }else{
-                File file = new File(paths[0]);
-
+                deepCopy(source);
             }
 
         }
@@ -32,30 +37,37 @@ public class CopyDirFiles {
     }
 
     private static void deepCopy(String path){
+        String folderName = path.substring(path.lastIndexOf("/"));
+//        Path
         File file = new File(path);
-
+        for(String value : file.list()){
+            File tmp = new File(value);
+            if (tmp.isDirectory()){
+                deepCopy(value);
+            }else{
+                
+            }
+        }
     }
 
-    private static void deepCopy(String path, int kak){
+    private static void deepCopy(String path, int... more){
         deepCopy(path);
-        File file = new File(path);
-
     }
 
-    private static boolean checkFileDirExists(String[] paths){
-        if (paths.length < 2){
+    private static boolean checkFileDirExists(){
+        if (target == null){
             System.out.println("请输入目标地址");
             return false;
         }
-        if (!Files.exists(Paths.get(paths[0]))){
+        if (!Files.exists(Paths.get(source))){
             System.out.println("源地址不存在！");
             return false;
         }
-        if (!Files.exists(Paths.get(paths[1]))){
+        if (!Files.exists(Paths.get(target))){
             System.out.println("目标地址不存在");
             return false;
         }
-        if (!Files.isDirectory(Paths.get(paths[1]))){
+        if (!Files.isDirectory(Paths.get(target))){
             System.out.println("目标地址不是目录");
             return false;
         }
