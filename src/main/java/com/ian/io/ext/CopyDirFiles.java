@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
@@ -23,35 +22,46 @@ public class CopyDirFiles {
             source = paths[0];
             target = paths[1];
             if(!checkFileDirExists()){
+                init();
                 continue;
             }
             // 如果源地址是文件
             if(!Files.isDirectory(Paths.get(source))){
                 copy(source, target);
             }else{
-                deepCopy(source);
+                File file = new File(source);
+                deepCopy(file, target);
             }
-
+            init();
         }
-
     }
 
-    private static void deepCopy(String path){
-        String folderName = path.substring(path.lastIndexOf("/"));
-//        Path
-        File file = new File(path);
-        for(String value : file.list()){
-            File tmp = new File(value);
-            if (tmp.isDirectory()){
-                deepCopy(value);
+    private static void deepCopy(File dir, String targetPath) throws IOException{
+        // 获取目标目录路径
+        targetPath += "/" + dir.getName();
+        File targetDir = new File(targetPath);
+        // 如果目标目录不存在，创建目标目录
+        if (!targetDir.exists()){
+            targetDir.mkdir();
+        }
+        // 获取当前路径下的所有目录和文件
+        File[] files = dir.listFiles();
+        for(File file : files){
+            if (file.isDirectory()){
+                deepCopy(file, targetPath);
             }else{
-                
+                copy(file.getAbsolutePath(), targetPath);
             }
         }
     }
 
-    private static void deepCopy(String path, int... more){
-        deepCopy(path);
+    // 递归深度可以设置
+    private static void deepCopy (File file, String targetPath, int... more) throws IOException {
+        deepCopy(file, targetPath);
+    }
+
+    private static void init (){
+        source = target = "";
     }
 
     private static boolean checkFileDirExists(){
@@ -93,6 +103,7 @@ public class CopyDirFiles {
     }
 
     private static String getFilename(String path){
+        path = path.replace("\\", "/");
         int last = path.lastIndexOf("/");
         return path.substring(last);
     }
