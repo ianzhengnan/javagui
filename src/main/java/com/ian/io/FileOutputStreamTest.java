@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+// 以下程序可以实现一个文件的copy
 public class FileOutputStreamTest {
 
     public static void main(String[] args) throws IOException {
