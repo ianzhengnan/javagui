@@ -8,8 +8,6 @@ import java.io.IOException;
  */
 public interface HandleDirFile {
 
-    void init();
-
     void cd();
 
     void copy(String sourcePath, String targetPath) throws IOException;

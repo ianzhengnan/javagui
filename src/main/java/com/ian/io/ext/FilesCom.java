@@ -46,6 +46,7 @@ public class FilesCom {
         sc.useDelimiter("\n");
         // 打印命令前缀
         printCurrentPath();
+        initial();
         while(sc.hasNext()){
             String[] paths = sc.next().split("\\s+");
 
@@ -53,7 +54,7 @@ public class FilesCom {
                 if (!checkCommand(paths)){
                     System.out.println(msgs.get(getMsgCode()));
                     printCurrentPath();
-                    fileDirHandler.init();
+                    initial();
                     continue;
                 }
             }catch (InputCheckException ice){
@@ -64,9 +65,14 @@ public class FilesCom {
             handleCmd();
             printCurrentPath();
             // reset
-            fileDirHandler.init();
+            initial();
         }
         System.out.println("到这里了？");
+    }
+
+    private void initial() {
+        setSource("");
+        setTarget("");
     }
 
     public String getCmd() {
@@ -148,8 +154,12 @@ public class FilesCom {
     private void listAll() {
         int fileCount, dirCount;
         fileCount = dirCount = 0;
+        File current = currentPath;
+        if (source != null && !source.equals("")){
+            current = new File(source);
+        }
         for (File file:
-             currentPath.listFiles()) {
+             current.listFiles()) {
             // 最后修改时间
             System.out.print((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(file.lastModified()) + " ");
             // 如果是目录就显示<DIR>
@@ -231,9 +241,14 @@ public class FilesCom {
                         setSource(sourceFile.getCanonicalPath());
                     }
                 }else{
-                    if (paths.length > 1 && !Files.exists(Paths.get(paths[1]))){
-                        setMsgCode(3);
-                        result = false;
+                    if (paths.length > 1){
+                        File sourceFile = getSourceFile(paths[1]);
+                        if (!sourceFile.exists()){
+                            setMsgCode(3);
+                            result = false;
+                        }else{
+                            setSource(sourceFile.getCanonicalPath());
+                        }
                     }
                 }
 
