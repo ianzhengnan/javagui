@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class FilesCom {
 
     private String cmd;
-    private final String[] cmds = {"cp", "mv", "del", "ll", "help", "cd"};
+    private final String[] cmds = {"cp", "mv", "del", "ll", "help", "cd", "cat", "exit"};
     private final static File originPath = new File(".");
     private File currentPath;
     private String source;
@@ -133,9 +133,20 @@ public class FilesCom {
             case "help":
                 showHelp();
                 break;
+            case "cat":
+                catFile();
+                break;
+            case "exit":
+                // 退出程序
+                System.exit(1);
+                break;
             default:
                 break;
         }
+    }
+
+    private void catFile() {
+
     }
 
     private void handleCd() {
@@ -143,7 +154,13 @@ public class FilesCom {
     }
 
     private void showHelp() {
-
+        System.out.println("cp 复制文件或目录");
+        System.out.println("mv 移动文件或目录");
+        System.out.println("del 删除文件或目录");
+        System.out.println("cat 显示文件内容");
+        System.out.println("ll [path] 显示目录");
+        System.out.println("cd 移动当前所在路径");
+        System.out.println("exit 退出程序");
     }
 
     private void handleDelete() throws IOException{
@@ -206,7 +223,7 @@ public class FilesCom {
         boolean result = true;
 
         String one = "ll|help";
-        String two = "ll|cd|del";
+        String two = "ll|cd|del|cat";
         String three = "cp|mv";
 
         // 检查输入命令是否合法
