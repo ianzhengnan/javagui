@@ -197,8 +197,9 @@ public class FilesCom {
 
 
     private void handleMove() throws IOException{
-        fileDirHandler.move(source, target);
-        System.out.println("移动文件或目录....");
+        handleCopy();
+        handleDelete();
+//        fileDirHandler.move(source, target);
     }
 
     private void handleCopy() throws IOException{
