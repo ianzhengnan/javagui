@@ -98,7 +98,13 @@ public class SimpleFileDirHandler implements HandleDirFile{
 
     @Override
     public void deleteFile(File file) throws IOException {
-
+        if (file.isDirectory()){
+            for (File inside:
+                    file.listFiles()) {
+                deleteFile(inside);
+            }
+        }
+        file.delete();
     }
 
     public String getSource() {

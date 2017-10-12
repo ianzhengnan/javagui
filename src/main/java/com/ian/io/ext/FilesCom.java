@@ -165,7 +165,6 @@ public class FilesCom {
 
     private void handleDelete() throws IOException{
         fileDirHandler.deleteFile(new File(source));
-        System.out.println("删除文件或目录....");
     }
 
     private void listAll() {
