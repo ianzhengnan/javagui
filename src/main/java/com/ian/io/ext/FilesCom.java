@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -113,12 +114,30 @@ public class FilesCom {
     }
 
     private void listAll() {
-        System.out.println("打印当前目录的文件和子目录名....");
+        int fileCount, dirCount;
+        fileCount = dirCount = 0;
         for (File file:
              currentPath.listFiles()) {
+            // 最后修改时间
+            System.out.print((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(file.lastModified()) + " ");
+            // 如果是目录就显示<DIR>
+            System.out.print(file.isDirectory()? "<DIR>": " ");
+            // 显示文件大小(字节)
+            System.out.print(!file.isDirectory()? file.length() + " " : " ");
+            // 显示文件或目录名
+            System.out.println(file.getName());
 
+            if (file.isDirectory()){
+                dirCount++;
+            }else{
+                fileCount++;
+            }
         }
+        System.out.println("共" + fileCount + "个文件 " + dirCount + "个目录");
+        printCurrentPath(originPath );
     }
+
+
 
     private void handleMove() throws IOException{
         fileDirHandler.move(source, target);
