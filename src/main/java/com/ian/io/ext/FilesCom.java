@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -19,6 +21,15 @@ public class FilesCom {
     private String target;
 
     private HandleDirFile fileDirHandler;
+    private Integer msgCode = 0;
+    private final static Map<Integer, String> msgs = new HashMap<>();
+
+    {
+        msgs.put(1, "此命令不存在");
+        msgs.put(2, "您的输入不合法");
+        msgs.put(3, "源路径不存在");
+        msgs.put(4, "源路径或目标路径不存在");
+    }
 
     public FilesCom(){
         this.fileDirHandler = new SimpleFileDirHandler();
@@ -33,10 +44,17 @@ public class FilesCom {
         while(sc.hasNext()){
             String[] paths = sc.next().split("\\s+");
 
-            if (!checkCommand(paths)){
-                fileDirHandler.init();
-                continue;
+            try{
+                if (!checkCommand(paths)){
+                    System.out.println(msgs.get(getMsgCode()));
+                    printCurrentPath(originPath);
+                    fileDirHandler.init();
+                    continue;
+                }
+            }catch (InputCheckException ice){
+                System.out.println(ice.getMessage());
             }
+
             // handle command
             handleCmd();
             // reset
@@ -68,6 +86,14 @@ public class FilesCom {
 
     public String getTarget() {
         return target;
+    }
+
+    public Integer getMsgCode() {
+        return msgCode;
+    }
+
+    public void setMsgCode(Integer msgCode) {
+        this.msgCode = msgCode;
     }
 
     public void setTarget(String target) {
@@ -105,7 +131,7 @@ public class FilesCom {
     }
 
     private void showHelp() {
-
+        printCurrentPath(originPath);
     }
 
     private void handleDelete() throws IOException{
@@ -159,76 +185,74 @@ public class FilesCom {
         System.out.print(absPath.substring(0,absPath.lastIndexOf("\\")) + ">");
     }
 
-    private void setTargetAndSource(String[] paths){
+    private boolean checkCommand(String[] paths) throws InputCheckException{
 
-        // 这里也很恶心
+        boolean result = true;
 
-        if(paths[0].equals("") || paths[0].equals("help") || paths[0].equals("ll")){
-            printCurrentPath(originPath);
-            return;
-        }
-        setSource(paths[1]);
-        if(paths[0].equals("ll") || paths[0].equals("del")){
-            printCurrentPath(originPath);
-            return;
-        }
-        setTarget(paths[2]);
-    }
+        String one = "ll|help";
+        String two = "ll|cd|del";
+        String three = "cp|mv";
 
-    private boolean checkCommand (String[] paths){
-        // 此处应该改为正则表达式, 这里代码太恶心了！！
-
+        // 检查输入命令是否合法
         if (!Arrays.asList(cmds).contains(paths[0])){
-            System.out.println("没有此命令");
-            printCurrentPath(originPath);
-            return false;
+            setMsgCode(1);
+            result = false;
+        }else{
+            // 设置命令
+            setCmd(paths[0]);
         }
-
-        if (paths.length > 3){
-            System.out.println("您的输入不合法");
-            printCurrentPath(originPath);
-            return false;
-        }
-
-        if (paths.length == 1 && !paths[0].equals("help") && !paths[0].equals("") && !paths[0].equals("ll")){
-            System.out.println("您的输入不合法");
-            printCurrentPath(originPath);
-            return false;
-        }
-
-        if (!paths[0].equals("help") && !paths[0].equals("ll")){
-
-            if (!Files.exists(Paths.get(paths[1]))){
-                System.out.println("源地址不存在！");
-                printCurrentPath(originPath);
-                return false;
-            }
-
-            if (paths[2] == null){
-                System.out.println("请输入目标地址");
-                printCurrentPath(originPath);
-                return false;
-            }
-
-            if (!Files.exists(Paths.get(paths[2]))){
-                System.out.println("目标地址不存在");
-                printCurrentPath(originPath);
-                return false;
-            }
-            if (!Files.isDirectory(Paths.get(paths[2]))){
-                System.out.println("目标地址不是目录");
-                printCurrentPath(originPath);
-                return false;
+        // 无参数命令
+        if (one.contains(paths[0])) {
+            if (!paths[0].equals("ll") && paths.length != 1){
+                setMsgCode(2);
+                result = false;
             }
         }
+        // 一个参数的命令
+        if (two.contains(paths[0])){
+            if(!paths[0].equals("ll") && paths.length != 2){
+                setMsgCode(2);
+                result = false;
+            }else{
+                if (!paths[0].equals("ll")){
+                    // 检查源路径
+                    if (!Files.exists(Paths.get(paths[1]))){
+                        setMsgCode(3);
+                        result = false;
+                    }else{
+                        // 设置源路径
+                        setSource(paths[1]);
+                    }
+                }else{
+                    if (paths.length > 1 && !Files.exists(Paths.get(paths[1]))){
+                        setMsgCode(3);
+                        result = false;
+                    }
+                }
 
-        // 需要将相对路径转换成绝对路径
-        setTargetAndSource(paths);
-        // 如果检查都没错，设置cmd值
-        setCmd(paths[0]);
-        return true;
+            }
+        }
+        // 两个参数的命令
+        if(three.contains(paths[0])){
+            if (paths.length != 3){
+                setMsgCode(2);
+                result = false;
+            }else{
+                // 检查源路径和目标路径
+                if (!Files.exists(Paths.get(paths[1])) || !Files.exists(Paths.get(paths[2]))){
+                    setMsgCode(4);
+                    result = false;
+                }else{
+                    // 设置源路径
+                    setSource(paths[1]);
+                    // 设置目标路径
+                    setTarget(paths[2]);
+                }
+            }
+        }
+
+        return result;
     }
-
 
 
 }
