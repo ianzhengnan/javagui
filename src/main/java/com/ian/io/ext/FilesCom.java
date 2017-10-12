@@ -222,13 +222,13 @@ public class FilesCom {
             }else{
                 if (!paths[0].equals("ll")){
                     // 检查源路径
-                    File sourceFile = new File(Paths.get(currentPath.getAbsolutePath(), paths[1]).toString());
+                    File sourceFile = new File(Paths.get(currentPath.getCanonicalPath(), paths[1]).toString());
                     if (!sourceFile.exists()){
                         setMsgCode(3);
                         result = false;
                     }else{
                         // 设置源路径
-                        setSource(sourceFile.getAbsolutePath());
+                        setSource(sourceFile.getCanonicalPath());
                     }
                 }else{
                     if (paths.length > 1 && !Files.exists(Paths.get(paths[1]))){
