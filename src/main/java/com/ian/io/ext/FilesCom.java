@@ -5,14 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 
 public class FilesCom {
 
     private String cmd;
-    private final String[] cmds = {"cp", "mv", "del", "ll", "help"};
+    private final String[] cmds = {"cp", "mv", "del", "ll", "help", "cd"};
     private final File originPath = new File(".");
     private File currentPath = new File(".");
     private String source;
@@ -77,6 +76,9 @@ public class FilesCom {
     private void handleCmd() throws Throwable{
 
         switch (cmd){
+            case "cd":
+                handleCd();
+                break;
             case "cp":
                 handleCopy();
                 break;
@@ -97,6 +99,10 @@ public class FilesCom {
         }
     }
 
+    private void handleCd() {
+
+    }
+
     private void showHelp() {
 
     }
@@ -108,6 +114,10 @@ public class FilesCom {
 
     private void listAll() {
         System.out.println("打印当前目录的文件和子目录名....");
+        for (File file:
+             currentPath.listFiles()) {
+
+        }
     }
 
     private void handleMove() throws IOException{
@@ -130,7 +140,10 @@ public class FilesCom {
         System.out.print(absPath.substring(0,absPath.lastIndexOf("\\")) + ">");
     }
 
-    private void setTargetAndSouce(String[] paths){
+    private void setTargetAndSource(String[] paths){
+
+        // 这里也很恶心
+
         if(paths[0].equals("") || paths[0].equals("help") || paths[0].equals("ll")){
             printCurrentPath(originPath);
             return;
@@ -191,7 +204,7 @@ public class FilesCom {
         }
 
         // 需要将相对路径转换成绝对路径
-        setTargetAndSouce(paths);
+        setTargetAndSource(paths);
         // 如果检查都没错，设置cmd值
         setCmd(paths[0]);
         return true;

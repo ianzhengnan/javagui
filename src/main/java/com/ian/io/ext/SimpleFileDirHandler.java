@@ -17,7 +17,7 @@ public class SimpleFileDirHandler implements HandleDirFile{
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         while(sc.hasNext()){
-            String[] paths = sc.next().split(" ");
+            String[] paths = sc.next().split("\\s+");
             source = paths[0];
             target = paths[1];
             if(!checkFileDirExists()){
