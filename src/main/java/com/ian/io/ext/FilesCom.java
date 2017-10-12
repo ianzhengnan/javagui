@@ -222,7 +222,7 @@ public class FilesCom {
             }else{
                 if (!paths[0].equals("ll")){
                     // 检查源路径
-                    File sourceFile = new File(Paths.get(currentPath.getCanonicalPath(), paths[1]).toString());
+                    File sourceFile = getSourceFile(paths[1]);
                     if (!sourceFile.exists()){
                         setMsgCode(3);
                         result = false;
@@ -259,6 +259,17 @@ public class FilesCom {
         }
 
         return result;
+    }
+
+    private File getSourceFile(String path) throws IOException{
+
+        File file = new File(Paths.get(currentPath.getCanonicalPath(), path).toString());
+
+        if (Paths.get(path).isAbsolute()){
+            file = new File(path);
+        }
+
+        return file;
     }
 
 
