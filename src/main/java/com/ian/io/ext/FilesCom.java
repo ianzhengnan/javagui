@@ -246,14 +246,16 @@ public class FilesCom {
                 result = false;
             }else{
                 // 检查源路径和目标路径
-                if (!Files.exists(Paths.get(paths[1])) || !Files.exists(Paths.get(paths[2]))){
+                File sourceFile = getSourceFile(paths[1]);
+                File targetFile = getSourceFile(paths[2]);
+                if (!sourceFile.exists() || !targetFile.exists()){
                     setMsgCode(4);
                     result = false;
                 }else{
                     // 设置源路径
-                    setSource(paths[1]);
+                    setSource(sourceFile.getCanonicalPath());
                     // 设置目标路径
-                    setTarget(paths[2]);
+                    setTarget(targetFile.getCanonicalPath());
                 }
             }
         }
