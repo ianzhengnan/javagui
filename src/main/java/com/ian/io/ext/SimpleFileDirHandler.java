@@ -69,7 +69,9 @@ public class SimpleFileDirHandler implements HandleDirFile{
         setTarget("");
     }
 
+    public void cd(){
 
+    }
 
     public void copy(String sourcePath, String targetPath) throws IOException{
 

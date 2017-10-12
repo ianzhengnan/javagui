@@ -10,6 +10,8 @@ public interface HandleDirFile {
 
     void init();
 
+    void cd();
+
     void copy(String sourcePath, String targetPath) throws IOException;
 
     void deepCopy(File file, String targetPath) throws IOException;

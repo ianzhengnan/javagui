@@ -43,6 +43,7 @@ public class FileTest {
             System.out.println(root);
         }
 
-
+        File file2 = new File("c:/users/i076453/git/java/javagui");
+        System.out.println(file2.getName());
     }
 }

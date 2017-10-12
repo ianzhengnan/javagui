@@ -15,8 +15,8 @@ public class FilesCom {
 
     private String cmd;
     private final String[] cmds = {"cp", "mv", "del", "ll", "help", "cd"};
-    private final File originPath = new File(".");
-    private File currentPath = new File(".");
+    private final static File originPath = new File(".");
+    private File currentPath;
     private String source;
     private String target;
 
@@ -33,6 +33,11 @@ public class FilesCom {
 
     public FilesCom(){
         this.fileDirHandler = new SimpleFileDirHandler();
+        try{
+            currentPath = new File(originPath.getCanonicalPath());
+        }catch (IOException ioe){
+            ioe.printStackTrace();
+        }
     }
 
     public void initialize() throws Throwable{
@@ -40,14 +45,14 @@ public class FilesCom {
         Scanner sc = new Scanner(System.in);
         sc.useDelimiter("\n");
         // 打印命令前缀
-        printCurrentPath(originPath);
+        printCurrentPath();
         while(sc.hasNext()){
             String[] paths = sc.next().split("\\s+");
 
             try{
                 if (!checkCommand(paths)){
                     System.out.println(msgs.get(getMsgCode()));
-                    printCurrentPath(originPath);
+                    printCurrentPath();
                     fileDirHandler.init();
                     continue;
                 }
@@ -57,6 +62,7 @@ public class FilesCom {
 
             // handle command
             handleCmd();
+            printCurrentPath();
             // reset
             fileDirHandler.init();
         }
@@ -127,11 +133,11 @@ public class FilesCom {
     }
 
     private void handleCd() {
-
+        currentPath = new File(source);
     }
 
     private void showHelp() {
-        printCurrentPath(originPath);
+
     }
 
     private void handleDelete() throws IOException{
@@ -160,7 +166,6 @@ public class FilesCom {
             }
         }
         System.out.println("共" + fileCount + "个文件 " + dirCount + "个目录");
-        printCurrentPath(originPath );
     }
 
 
@@ -180,12 +185,13 @@ public class FilesCom {
         }
     }
 
-    private void printCurrentPath(File file){
-        String absPath = file.getAbsolutePath();
-        System.out.print(absPath.substring(0,absPath.lastIndexOf("\\")) + ">");
+    private void printCurrentPath() throws IOException{
+        System.out.print(currentPath.getCanonicalPath() + ">");
+//        String absPath = currentPath.getAbsolutePath();
+//        System.out.print(absPath.substring(0,absPath.lastIndexOf("\\")) + ">");
     }
 
-    private boolean checkCommand(String[] paths) throws InputCheckException{
+    private boolean checkCommand(String[] paths) throws Exception{
 
         boolean result = true;
 
@@ -216,12 +222,13 @@ public class FilesCom {
             }else{
                 if (!paths[0].equals("ll")){
                     // 检查源路径
-                    if (!Files.exists(Paths.get(paths[1]))){
+                    File sourceFile = new File(paths[1]);
+                    if (!sourceFile.exists()){
                         setMsgCode(3);
                         result = false;
                     }else{
                         // 设置源路径
-                        setSource(paths[1]);
+                        setSource(sourceFile.getCanonicalPath());
                     }
                 }else{
                     if (paths.length > 1 && !Files.exists(Paths.get(paths[1]))){
