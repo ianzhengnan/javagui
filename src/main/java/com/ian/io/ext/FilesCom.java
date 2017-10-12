@@ -145,8 +145,13 @@ public class FilesCom {
         }
     }
 
-    private void catFile() {
-
+    private void catFile() throws IOException{
+        File sourceFile = new File(source);
+        if (sourceFile.isFile()){
+            fileDirHandler.cat(sourceFile);
+        }else{
+            System.out.println("这不是文件");
+        }
     }
 
     private void handleCd() {

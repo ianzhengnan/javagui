@@ -15,4 +15,6 @@ public interface HandleDirFile {
     void move(String sourcePath, String targetPath) throws IOException;
 
     void deleteFile(File file) throws IOException;
+
+    void cat(File file) throws IOException;
 }

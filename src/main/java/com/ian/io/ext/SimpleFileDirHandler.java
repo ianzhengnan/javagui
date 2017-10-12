@@ -96,6 +96,8 @@ public class SimpleFileDirHandler implements HandleDirFile{
 
     }
 
+
+
     @Override
     public void deleteFile(File file) throws IOException {
         if (file.isDirectory()){
@@ -105,6 +107,20 @@ public class SimpleFileDirHandler implements HandleDirFile{
             }
         }
         file.delete();
+    }
+
+    @Override
+    public void cat(File file) throws IOException {
+
+        try (
+                FileInputStream inputStream = new FileInputStream(file)
+        ) {
+            byte[] buffer = new byte[256];
+            int hasRead;
+            while((hasRead = inputStream.read(buffer)) > 0){
+                System.out.println(new String(buffer, 0, hasRead));
+            }
+        }
     }
 
     public String getSource() {
