@@ -302,12 +302,12 @@ public class FilesCom {
 
     private File getSourceFile(String path) throws IOException{
 
-        File file = new File(Paths.get(currentPath.getCanonicalPath(), path).toString());
-
+        File file;
         if (Paths.get(path).isAbsolute()){
             file = new File(path);
+            return file;
         }
-
+        file = new File(Paths.get(currentPath.getCanonicalPath(), path).toString());
         return file;
     }
 
