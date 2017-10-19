@@ -14,8 +14,12 @@ public class MapTest {
 //            map.put(list.get(i), Collections.frequency(list, list.get(i)));
 //        }
         // 下面这种方法更快
-        for (int i = 0; i < list.size(); i++) {
-            map.put(list.get(i), map.get(list.get(i)) == null? 1 : map.get(list.get(i)) + 1);
+//        for (int i = 0; i < list.size(); i++) {
+//            map.put(list.get(i), map.get(list.get(i)) == null? 1 : map.get(list.get(i)) + 1);
+//        }
+        // 第三种方法更快
+        for (int i = 0; i < strs.length; i++) {
+            map.put(strs[i], map.get(strs[i]) == null ? 1 : map.get(strs[i]) + 1);
         }
         long end = System.currentTimeMillis();
         System.out.println(map);
