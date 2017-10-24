@@ -1,4 +1,4 @@
-package com.ian.concurrent.ext;
+package com.ian.concurrent.ext.exercise1;
 
 public class Printer {
     private final int[] numbers = new int[52];

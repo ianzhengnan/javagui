@@ -1,4 +1,4 @@
-package com.ian.concurrent.ext;
+package com.ian.concurrent.ext.exercise1;
 
 public class PrintChar implements Runnable {
 
