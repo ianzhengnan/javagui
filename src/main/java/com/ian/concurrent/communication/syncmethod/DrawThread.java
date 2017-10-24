@@ -1,4 +1,4 @@
-package com.ian.concurrent.communication;
+package com.ian.concurrent.communication.syncmethod;
 
 public class DrawThread extends Thread{
 
