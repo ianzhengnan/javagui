@@ -12,17 +12,22 @@ public class DrawThread extends Thread{
     }
 
     public void run(){
-        if(account.getBalance() >= drawAmount){
-            System.out.println(getName() + "取钱成功！吐出钞票：" + drawAmount);
-            try{
-                Thread.sleep(1);
-            }catch(InterruptedException ex){
-                ex.printStackTrace();
-            }
-            account.setBalance(account.getBalance() - drawAmount);
-            System.out.println("\t余额为：" + account.getBalance());
-        }else{
-            System.out.println(getName() + "取钱失败！余额不足！");
-        }
+        // 使用同步方法替换下面的同步代码块
+        account.draw(drawAmount);
+
+//        synchronized (account){
+//            if(account.getBalance() >= drawAmount){
+//                System.out.println(getName() + "取钱成功！吐出钞票：" + drawAmount);
+//                try{
+//                    Thread.sleep(1);
+//                }catch(InterruptedException ex){
+//                    ex.printStackTrace();
+//                }
+//                account.setBalance(account.getBalance() - drawAmount);
+//                System.out.println("\t余额为：" + account.getBalance());
+//            }else{
+//                System.out.println(getName() + "取钱失败！余额不足！");
+//            }
+//        }
     }
 }

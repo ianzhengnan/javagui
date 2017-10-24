@@ -41,4 +41,19 @@ public class Account {
         }
         return false;
     }
+    // 同步方法，该方法的同步监听器是this
+    public synchronized void draw(double drawAmount){
+        if(balance >= drawAmount){
+            System.out.println(Thread.currentThread().getName() + "取钱成功！吐出钞票：" + drawAmount);
+            try{
+                Thread.sleep(1);
+            }catch(InterruptedException ex){
+                ex.printStackTrace();
+            }
+            balance -= drawAmount;
+            System.out.println("\t余额为：" + balance);
+        }else{
+            System.out.println(Thread.currentThread().getName() + "取钱失败！余额不足！");
+        }
+    }
 }
