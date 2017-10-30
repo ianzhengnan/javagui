@@ -26,10 +26,10 @@ public class AIOServer {
         AsynchronousChannelGroup channelGroup = AsynchronousChannelGroup.withThreadPool(executor);
         // 以指定线程池来创建一个 AsynchronousServerSocketChannel
         AsynchronousServerSocketChannel serverSocketChannel = AsynchronousServerSocketChannel.open(channelGroup)
-                .bind(new InetSocketAddress(PORT));
+                .bind(new InetSocketAddress("127.0.0.1", PORT), 1000);
         // 使用CompletionHandler接收来自客户端的连接请求
         serverSocketChannel.accept(null, new AcceptHandler(serverSocketChannel));
-
+//        serverSocketChannel.accept().get();
     }
 
     public static void main(String[] args) throws Exception{
@@ -54,6 +54,7 @@ class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, Obje
     public void completed(AsynchronousSocketChannel sc, Object attachment) {
         // 记录进来的Channel
         AIOServer.channelList.add(sc);
+        // 接收用户的下一次连接
         serverSocketChannel.accept(null, this);
         sc.read(buffer, null, new CompletionHandler<Integer, Object>() {
             @Override
