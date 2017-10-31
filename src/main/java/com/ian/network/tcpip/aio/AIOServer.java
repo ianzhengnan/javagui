@@ -7,8 +7,7 @@ import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
 import java.nio.channels.CompletionHandler;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,6 +16,7 @@ public class AIOServer {
     private static int PORT = 30000;
     final static String UTF_8 = "UTF-8";
     static List<AsynchronousSocketChannel> channelList = new ArrayList<>();
+    static Map<String, AsynchronousSocketChannel> channelMap = Collections.synchronizedMap(new HashMap<>());
 
     public void startListen() throws Exception{
 
