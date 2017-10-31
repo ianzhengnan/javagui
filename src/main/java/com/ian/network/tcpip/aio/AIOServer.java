@@ -20,16 +20,22 @@ public class AIOServer {
 
     public void startListen() throws Exception{
 
+        System.out.println("Server listen on " + PORT);
+
         // 创建一个线程池
         ExecutorService executor = Executors.newFixedThreadPool(20);
         // 以指定线程池来创建一个 AsynchronousChannelGroup
         AsynchronousChannelGroup channelGroup = AsynchronousChannelGroup.withThreadPool(executor);
-        // 以指定线程池来创建一个 AsynchronousServerSocketChannel
+        // 以指定AsynchronousChannelGroup来创建一个 AsynchronousServerSocketChannel
         AsynchronousServerSocketChannel serverSocketChannel = AsynchronousServerSocketChannel.open(channelGroup)
-                .bind(new InetSocketAddress("127.0.0.1", PORT), 1000);
+                .bind(new InetSocketAddress(PORT));
         // 使用CompletionHandler接收来自客户端的连接请求
         serverSocketChannel.accept(null, new AcceptHandler(serverSocketChannel));
-//        serverSocketChannel.accept().get();
+        // 这里原书中没有，必须加上，不然程序直接退出
+        while(true){
+//            System.out.println("main thread");
+            Thread.sleep(1000);
+        }
     }
 
     public static void main(String[] args) throws Exception{
@@ -43,6 +49,7 @@ public class AIOServer {
 class AcceptHandler implements CompletionHandler<AsynchronousSocketChannel, Object>{
 
     private AsynchronousServerSocketChannel serverSocketChannel;
+
     public AcceptHandler(AsynchronousServerSocketChannel sc){
         this.serverSocketChannel = sc;
     }
