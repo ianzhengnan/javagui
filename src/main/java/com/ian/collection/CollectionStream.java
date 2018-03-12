@@ -15,10 +15,10 @@ public class CollectionStream {
         System.out.println(books.stream().filter(ele -> ((String)ele).contains("疯狂")).count());
         System.out.println(books.stream().filter(ele -> ((String)ele).contains("java")).count());
         System.out.println(books.stream().filter(ele -> ((String)ele).length() > 10).count());
-
+        System.out.println("----------------");
         // 先调用Collection对象的stream()方法将集合转换成Stream
         // 再调用stream的mapToInt()方法获取原有的Stream对应的IntStream
-        books.stream().mapToInt(ele -> ((String)ele).length()).forEach(System.out::print);
+        books.stream().mapToInt(ele -> ((String)ele).length()).forEach(System.out::println);
     }
 
 

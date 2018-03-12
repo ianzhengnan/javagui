@@ -27,7 +27,7 @@ public class FileChannelTst {
             // 直接将Buffer里的数据输出
             outChannel.write(buffer);
             // 复原position, limit
-            buffer.clear();
+            buffer.flip(); // buffer.clear() 也可以
             // 创建解码器
             CharsetDecoder decoder = charset.newDecoder();
             // 使用解码器将ByteBuffer转换成CharBuffer

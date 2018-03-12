@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.function.Predicate;
 
 public class PredicateTest2 {
-
+	
     public static void main(String[] args) {
 
         Collection books = new HashSet();

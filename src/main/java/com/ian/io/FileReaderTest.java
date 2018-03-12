@@ -8,11 +8,11 @@ public class FileReaderTest {
     public static void main(String[] args) throws IOException{
 
         try(
-                // 读取字节流, 构造器跟FileInputStream相同，可以接受String, File, FileDescriptor
+                // 读取字符流, 构造器跟FileInputStream相同，可以接受String, File, FileDescriptor
                 FileReader fileReader = new FileReader("src/main/java/com/ian/io/FileReaderTest.java")
                 ){
-            // 创建字节流缓冲
-            char[] chars = new char[1024];
+            // 创建字符流缓冲
+            char[] chars = new char[20];
             int hasRead;
             // hasRead返回每次读取的字符数
             while((hasRead = fileReader.read(chars)) > 0){
